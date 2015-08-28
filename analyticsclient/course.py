@@ -117,6 +117,16 @@ class Course(object):
         path = 'courses/{}/users/?page={}&limit={}'.format(self.course_id, page, limit)
         return self.client.get(path, data_format=data_format)
 
+    def typology(self, data_format=DF.JSON):
+        """
+        Get the typology data for the course.
+
+        Arguments:
+            data_format (str): Format in which data should be returned
+        """
+        path = 'courses/{0}/typology/'.format(self.course_id)
+        return self.client.get(path, data_format=data_format)
+
     def videos(self, data_format=DF.JSON):
         """
         Get the videos for the course.

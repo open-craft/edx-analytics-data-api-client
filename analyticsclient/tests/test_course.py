@@ -6,6 +6,7 @@ import httpretty
 from analyticsclient.constants import activity_type as at
 from analyticsclient.constants import data_format
 from analyticsclient.constants import demographic as demo
+from analyticsclient.constants import typology
 from analyticsclient.exceptions import NotFoundError, InvalidRequestError
 from analyticsclient.tests import ClientTestCase
 
@@ -184,6 +185,23 @@ class CoursesTests(ClientTestCase):
 
         self.course.list_users(page=30, limit=10)
         self.assertEqual(httpretty.last_request().querystring, {"limit": ['10'], "page": ['30']})
+
+    @httpretty.activate
+    def test_typology(self):
+
+        body = [
+            {
+                "chapter_id": "week2",
+                "video_type": typology.ALL,
+                "problem_type": typology.SOME,
+                "num_users": 1,
+                "created": "2015-08-20T043618"
+            }
+        ]
+
+        uri = self.get_api_url('courses/{0}/typology/'.format(self.course_id))
+        httpretty.register_uri(httpretty.GET, uri, body=json.dumps(body))
+        self.assertEqual(body, self.course.typology())
 
     @httpretty.activate
     def test_videos(self):
